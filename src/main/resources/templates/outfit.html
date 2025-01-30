@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head ('Outfit - Listado de Outfits')"></head>
+<body>
+
+<!-- Incluir el fragmento del header -->
+<header th:replace="fragments/header :: header"></header>
+
+<main class="container mt-5">
+    <h1 th:text="#{msg.outfit.title}">Listado de Outfits</h1>
+
+    <!-- Muestra un mensaje de error si hay algún problema -->
+    <div th:if="${errorMessage}" class="alert alert-danger">
+        <p th:text="${errorMessage}"></p>
+    </div>
+
+    <!-- Muestra un mensaje de éxito si existe -->
+    <div th:if="${successMessage}" class="alert alert-success">
+        <p th:text="${successMessage}"></p>
+    </div>
+
+    <!-- Muestra la lista de outfits en una tabla -->
+    <table class="table table-bordered mt-3">
+        <thead>
+        <tr>
+            <th th:text="#{msg.outfit.id}">ID</th>
+            <th th:text="#{msg.outfit.name}">Nombre</th>
+            <th th:text="#{msg.outfit.description}">Descripción</th>
+            <th th:text="#{msg.outfit.image}">Imagen</th>
+            <th th:text="#{msg.outfit.tipoDeRopa}">Tipo de Ropa</th>
+            <th th:text="#{msg.outfit.creationDate}">Fecha de Creación</th>
+            <th th:text="#{msg.outfit.actions}">Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="outfit : ${listOutfits}">
+            <td th:text="${outfit.id}"></td>
+            <td th:text="${outfit.nombre}"></td>
+            <td th:text="${outfit.descripcion}"></td>
+            <!-- Mostrar la imagen, si existe -->
+            <td>
+                <img th:if="${outfit.imagen}" th:src="@{${outfit.imagen}}" alt="Imagen de ${outfit.nombre}" width="100"/>
+                <span th:if="${not outfit.imagen}" class="text-muted">Sin imagen</span>
+            </td>
+            <!-- Mostrar los tipos de ropa asociados al outfit -->
+            <td>
+                <ul>
+                    <li th:each="tipo : ${outfit.tipoDeRopa}" th:text="${tipo.nombre}"></li>
+                </ul>
+            </td>
+            <!-- Mostrar la fecha de creación -->
+            <td th:text="${#dates.format(outfit.fechaCreacion, 'yyyy-MM-dd HH:mm')}"></td>
+            <td>
+                <!-- Botón para editar -->
+                <a th:href="@{/outfits/edit(id=${outfit.id})}" class="btn btn-primary btn-sm" th:text="#{msg.outfit.edit}">Editar</a>
+
+                <!-- Botón para eliminar -->
+                <form th:action="@{/outfits/delete(id=${outfit.id})}" method="post" class="d-inline">
+                    <input type="hidden" name="id" th:value="${outfit.id}"/>
+                    <button type="submit" class="btn btn-danger btn-sm"
+                            th:onclick="|return confirm('#{msg.outfit.confirm}');|"
+                            th:text="#{msg.outfit.delete}">Eliminar</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- Botón para añadir un nuevo outfit -->
+    <a th:href="@{/outfits/new}" class="btn btn-success mt-3" th:text="#{msg.outfit.add}">Añadir Outfit</a>
+
+    <!-- Volver a la página principal -->
+    <a th:href="@{/}" class="btn btn-secondary mt-3" th:text="#{msg.outfit.returnback}">Volver</a>
+</main>
+
+<!-- Incluir el fragmento del footer -->
+<footer th:replace="fragments/footer :: footer"></footer>
+
+</body>
+</html>

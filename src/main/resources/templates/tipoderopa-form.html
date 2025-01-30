@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head ('Outfit Logger - Insertar/Actualizar Tipo de Ropa')"></head>
+
+<body>
+
+<!-- Incluir el fragmento del header -->
+<header th:replace="fragments/header :: header"></header>
+
+<!-- Muestra un mensaje de error si hay algún problema -->
+<div th:if="${errorMessage}" class="alert alert-danger">
+    <p th:text="${errorMessage}"></p>
+</div>
+
+<main class="container mt-5">
+    <h1 th:text="${tipoDeRopa.id == null} ? #{msg.tipoDeRopa-form.add} : #{msg.tipoDeRopa-form.edit}">Insertar/Actualizar Tipo de Ropa</h1>
+
+    <form th:action="${tipoDeRopa.id == null} ? @{/tipos-de-ropa/insert} : @{/tipos-de-ropa/update}"
+          th:object="${tipoDeRopa}" method="post" enctype="multipart/form-data" class="mt-4">
+        <input type="hidden" th:field="*{id}" />
+        <div th:if="${#fields.hasErrors('id')}" class="text-danger" th:errors="*{id}"></div>
+
+        <!-- Campo de nombre -->
+        <div class="mb-3">
+            <label for="name" class="form-label" th:text="#{msg.tipoDeRopa-form.name}">Nombre</label>
+            <input type="text" th:field="*{nombre}" id="name" class="form-control" required/>
+            <div th:if="${#fields.hasErrors('nombre')}" class="text-danger" th:errors="*{nombre}"></div>
+        </div>
+
+        <!-- Campo de descripción -->
+        <div class="mb-3">
+            <label for="descripcion" class="form-label" th:text="#{msg.tipoDeRopa-form.description}">Descripción</label>
+            <input type="text" th:field="*{descripcion}" id="descripcion" class="form-control"/>
+            <div th:if="${#fields.hasErrors('descripcion')}" class="text-danger" th:errors="*{descripcion}"></div>
+        </div>
+
+        <!-- Campo de imagen (ajustado a tipo 'file') -->
+        <div class="mb-3">
+            <label for="imagen" class="form-label" th:text="#{msg.tipoDeRopa-form.image}">Imagen</label>
+            <input type="file" th:field="*{imagen}" id="imagen" class="form-control"/>
+            <div th:if="${#fields.hasErrors('imagen')}" class="text-danger" th:errors="*{imagen}"></div>
+        </div>
+
+        <!-- Botón para crear o actualizar el tipo de ropa -->
+        <button type="submit" class="btn btn-primary"
+                th:text="${tipoDeRopa.id == null} ? #{msg.tipoDeRopa-form.create} : #{msg.tipoDeRopa-form.update}">Guardar</button>
+    </form>
+
+    <!-- Volver a la lista de tipos de ropa -->
+    <a href="#" th:href="@{/tipos-de-ropa}" class="btn btn-secondary mt-3" th:text="#{msg.tipoDeRopa-form.returnback}">Volver</a>
+</main>
+
+<!-- Incluir el fragmento del footer -->
+<footer th:replace="fragments/footer :: footer"></footer>
+
+</body>
+</html>

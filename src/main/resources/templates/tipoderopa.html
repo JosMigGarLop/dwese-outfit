@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head ('Tipo de Ropa - Listado')"></head>
+<body>
+
+<!-- Incluir el fragmento del header -->
+<header th:replace="fragments/header :: header"></header>
+
+<main class="container mt-5">
+    <h1 th:text="#{msg.tipoDeRopa.title}"></h1>
+
+    <!-- Muestra un mensaje de error si hay algún problema -->
+    <div th:if="${errorMessage}" class="alert alert-danger">
+        <p th:text="${errorMessage}"></p>
+    </div>
+
+    <!-- Muestra la lista de tipos de ropa en una tabla -->
+    <table class="table table-bordered mt-3">
+        <thead>
+        <tr>
+            <th th:text="#{msg.tipoDeRopa.id}"></th>
+            <th th:text="#{msg.tipoDeRopa.nombre}"></th>
+            <th th:text="#{msg.tipoDeRopa.descripcion}"></th>
+            <th th:text="#{msg.tipoDeRopa.imagen}"></th>
+            <th th:text="#{msg.tipoDeRopa.actions}"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="tipoDeRopa : ${listTipoDeRopa}">
+            <td th:text="${tipoDeRopa.id}"></td>
+            <td th:text="${tipoDeRopa.nombre}"></td>
+            <td th:text="${tipoDeRopa.descripcion}"></td>
+            <td><img th:src="@{${tipoDeRopa.imagen}}" alt="Imagen" style="max-width: 100px;"></td>
+            <td>
+                <!-- Botón para editar -->
+                <a th:href="@{/tipos-de-ropa/edit(id=${tipoDeRopa.id})}" class="btn btn-primary btn-sm" th:text="#{msg.tipoDeRopa.edit}"></a>
+                <!-- Botón para eliminar -->
+                <form th:action="@{/tipos-de-ropa/delete}" method="post" class="d-inline">
+                    <input type="hidden" name="id" th:value="${tipoDeRopa.id}"/>
+                    <button type="submit" class="btn btn-danger btn-sm"
+                            th:onclick="return confirm('#{msg.tipoDeRopa.confirm}');"
+                            th:text="#{msg.tipoDeRopa.delete}">
+                    </button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- Botón para añadir un nuevo tipo de ropa -->
+    <a th:href="@{/tipos-de-ropa/new}" class="btn btn-success mt-3" th:text="#{msg.tipoDeRopa.add}"></a>
+
+    <!-- Volver a la página principal -->
+    <a href="#" th:href="@{/}" class="btn btn-secondary mt-3" th:text="#{msg.tipoDeRopa.returnback}"></a>
+</main>
+
+<!-- Incluir el fragmento del footer -->
+<footer th:replace="fragments/footer :: footer"></footer>
+
+</body>
+</html>
