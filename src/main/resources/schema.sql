@@ -1,23 +1,25 @@
--- Crear tabla para TipoDeRopa
-CREATE TABLE IF NOT EXISTS tipo_de_ropa (
+-- Crear tabla para los tipos de ropa
+CREATE TABLE IF NOT EXISTS tipos_de_ropa (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(100) NOT NULL,
-    descripcion VARCHAR(255) DEFAULT NULL  -- Permitimos NULL si no se proporciona una descripción
+    nombre VARCHAR(50) NOT NULL,
+    descripcion VARCHAR(255) NOT NULL
 );
 
--- Crear tabla para Outfits
 CREATE TABLE IF NOT EXISTS outfits (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(100) NOT NULL,
-    descripcion VARCHAR(255),
-    imagen VARCHAR(500),  -- Mantengo el tamaño, pero puedes ajustar si es necesario
-    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    tipo_de_ropa_id BIGINT NOT NULL,
-    CONSTRAINT fk_tipo_de_ropa
-        FOREIGN KEY (tipo_de_ropa_id) REFERENCES tipo_de_ropa(id)
-        ON DELETE CASCADE
-        ON UPDATE CASCADE
+    nombre VARCHAR(50) NOT NULL,
+    descripcion VARCHAR(255) NOT NULL,
+    fecha_creacion DATE NOT NULL DEFAULT CURRENT_DATE,
+    tipo_de_ropa_id BIGINT,  -- Hacemos nullable para que pueda ser NULL
+    CONSTRAINT fk_tipo_de_ropa FOREIGN KEY (tipo_de_ropa_id)
+    REFERENCES tipos_de_ropa(id)
+    ON DELETE SET NULL  -- Esto asegura que se ponga NULL en `outfits` cuando elimines un `TipoDeRopa`
+    ON UPDATE CASCADE
 );
+
+
+
+
 -- Crear la tabla 'users'
 CREATE TABLE IF NOT EXISTS users (
    id BIGINT PRIMARY KEY AUTO_INCREMENT,

@@ -1,57 +1,60 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/head :: head ('Tipo de Ropa - Listado')"></head>
+<head th:replace="fragments/head :: head ('Listado de Tipos de Ropa')"></head>
 <body>
 
 <!-- Incluir el fragmento del header -->
 <header th:replace="fragments/header :: header"></header>
 
 <main class="container mt-5">
-    <h1 th:text="#{msg.tipoDeRopa.title}"></h1>
+    <h1 th:text="#{msg.tipoderopa.title}"></h1>
 
-    <!-- Muestra un mensaje de error si hay algún problema -->
+    <!-- Mensaje de error -->
     <div th:if="${errorMessage}" class="alert alert-danger">
         <p th:text="${errorMessage}"></p>
     </div>
 
-    <!-- Muestra la lista de tipos de ropa en una tabla -->
     <table class="table table-bordered mt-3">
         <thead>
         <tr>
-            <th th:text="#{msg.tipoDeRopa.id}"></th>
-            <th th:text="#{msg.tipoDeRopa.nombre}"></th>
-            <th th:text="#{msg.tipoDeRopa.descripcion}"></th>
-            <th th:text="#{msg.tipoDeRopa.imagen}"></th>
-            <th th:text="#{msg.tipoDeRopa.actions}"></th>
+            <th th:text="#{msg.tipoderopa.id}"></th>
+            <th th:text="#{msg.tipoderopa.name}"></th>
+            <th th:text="#{msg.tipoderopa.description}"></th>
+            <th th:text="#{msg.tipoderopa.actions}"></th>
         </tr>
         </thead>
         <tbody>
-        <tr th:each="tipoDeRopa : ${listTipoDeRopa}">
+        <tr th:each="tipoDeRopa : ${listTiposDeRopa}">
             <td th:text="${tipoDeRopa.id}"></td>
             <td th:text="${tipoDeRopa.nombre}"></td>
             <td th:text="${tipoDeRopa.descripcion}"></td>
-            <td><img th:src="@{${tipoDeRopa.imagen}}" alt="Imagen" style="max-width: 100px;"></td>
             <td>
-                <!-- Botón para editar -->
-                <a th:href="@{/tipos-de-ropa/edit(id=${tipoDeRopa.id})}" class="btn btn-primary btn-sm" th:text="#{msg.tipoDeRopa.edit}"></a>
-                <!-- Botón para eliminar -->
+                <!-- Botón Editar -->
+                <a th:href="@{/tipos-de-ropa/edit(id=${tipoDeRopa.id})}"
+                   class="btn btn-primary btn-sm" th:text="#{msg.tipoderopa.edit}">
+                </a>
+
+                <!-- Botón Eliminar -->
                 <form th:action="@{/tipos-de-ropa/delete}" method="post" class="d-inline">
                     <input type="hidden" name="id" th:value="${tipoDeRopa.id}"/>
                     <button type="submit" class="btn btn-danger btn-sm"
-                            th:onclick="return confirm('#{msg.tipoDeRopa.confirm}');"
-                            th:text="#{msg.tipoDeRopa.delete}">
+                            th:onclick="return confirm([[#{msg.tipoderopa.confirm}]])"
+                            th:text="#{msg.tipoderopa.delete}">
                     </button>
                 </form>
+
+
+
             </td>
         </tr>
         </tbody>
     </table>
 
-    <!-- Botón para añadir un nuevo tipo de ropa -->
-    <a th:href="@{/tipos-de-ropa/new}" class="btn btn-success mt-3" th:text="#{msg.tipoDeRopa.add}"></a>
+    <!-- Botón para añadir nuevo tipo de ropa -->
+    <a th:href="@{/tipos-de-ropa/new}" class="btn btn-success mt-3" th:text="#{msg.tipoderopa.add}"></a>
 
     <!-- Volver a la página principal -->
-    <a href="#" th:href="@{/}" class="btn btn-secondary mt-3" th:text="#{msg.tipoDeRopa.returnback}"></a>
+    <a th:href="@{/}" class="btn btn-secondary mt-3" th:text="#{msg.tipoderopa.returnback}"></a>
 </main>
 
 <!-- Incluir el fragmento del footer -->

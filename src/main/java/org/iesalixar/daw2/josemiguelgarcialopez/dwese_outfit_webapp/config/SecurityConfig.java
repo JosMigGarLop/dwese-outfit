@@ -54,7 +54,7 @@ public class SecurityConfig {
                     auth
                             .requestMatchers("/", "/hello").permitAll()         // Acceso anónimo
                             .requestMatchers("/admin").hasRole("ADMIN")         // Solo ADMIN
-                            .requestMatchers("/outfits", "/tipos-de-ropa").hasAnyRole("USER", "MANAGER") // Permite acceso a USER y MANAGER
+                            .requestMatchers("/outfits", "/tipos-de-ropa").hasAnyRole("USER", "MANAGER", "ADMIN") // Permite acceso a USER,MANAGER Y ADMIN
                             .anyRequest().authenticated();                      // Cualquier otra solicitud requiere autenticación
                 })
                 .formLogin(form -> {

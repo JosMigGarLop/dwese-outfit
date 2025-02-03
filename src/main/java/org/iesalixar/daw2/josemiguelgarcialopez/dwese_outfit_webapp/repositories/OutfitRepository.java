@@ -45,26 +45,20 @@ public interface OutfitRepository extends JpaRepository<Outfit, Long> {
     Optional<Outfit> findById(Long id);
 
     /**
-     * Obtiene todos los outfits por un tipo de ropa específico.
-     *
-     * @param tipoDeRopaId el ID del tipo de ropa.
-     * @return una lista de outfits que pertenecen al tipo de ropa especificado.
-     */
-    List<Outfit> findByTipoDeRopaId(Long tipoDeRopaId);
-
-    /**
      * Comprueba si existe un outfit con un nombre específico.
      *
      * @param nombre el nombre del outfit.
      * @return true si existe un outfit con el nombre especificado, false en caso contrario.
      */
     boolean existsByNombre(String nombre);
+    public List<Outfit> findByTipoDeRopaId(Long tipoDeRopaId);
+
 
     /**
      * Comprueba si existe un outfit con un nombre específico, excluyendo un outfit por su ID.
      *
      * @param nombre el nombre del outfit.
-     * @param id     el ID del outfit a excluir.
+     * @param id el ID del outfit a excluir.
      * @return true si existe un outfit con el nombre especificado (excluyendo el outfit con el ID dado), false en caso contrario.
      */
     @Query("SELECT COUNT(o) > 0 FROM Outfit o WHERE o.nombre = :nombre AND o.id != :id")
