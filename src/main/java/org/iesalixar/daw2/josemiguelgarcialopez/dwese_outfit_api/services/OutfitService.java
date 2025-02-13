@@ -1,6 +1,8 @@
 package org.iesalixar.daw2.josemiguelgarcialopez.dwese_outfit_api.services;
 
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.iesalixar.daw2.josemiguelgarcialopez.dwese_outfit_api.dtos.OutfitCreateDTO;
 import org.iesalixar.daw2.josemiguelgarcialopez.dwese_outfit_api.dtos.OutfitDTO;
 import org.iesalixar.daw2.josemiguelgarcialopez.dwese_outfit_api.entities.Outfit;
@@ -14,10 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Locale;
-import java.util.Optional;
-import java.util.stream.Collectors;
+
 
 @Service
 public class OutfitService {
@@ -41,16 +41,15 @@ public class OutfitService {
      *
      * @return Lista de OutfitDTO.
      */
-    public List<OutfitDTO> getAllOutfits() {
-        logger.info("Solicitando todos los outfits...");
+    public Page<OutfitDTO> getAllOutfits(Pageable pageable) {
+        logger.info("Solicitando todos los outfits con paginación: página {}, tamaño {}",
+                pageable.getPageNumber(), pageable.getPageSize());
         try {
-            List<Outfit> outfits = outfitRepository.findAll();
-            logger.info("Se han encontrado {} outfits.", outfits.size());
-            return outfits.stream()
-                    .map(outfitMapper::toDTO)
-                    .collect(Collectors.toList());
+            Page<Outfit> outfits = outfitRepository.findAll(pageable);
+            logger.info("Se han encontrado {} outfits en la página actual.", outfits.getNumberOfElements());
+            return outfits.map(outfitMapper::toDTO);
         } catch (Exception e) {
-            logger.error("Error al obtener la lista de outfits: {}", e.getMessage());
+            logger.error("Error al obtener la lista paginada de outfits: {}", e.getMessage(), e);
             throw e;
         }
     }

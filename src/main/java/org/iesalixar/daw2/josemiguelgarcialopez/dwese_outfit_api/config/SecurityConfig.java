@@ -56,7 +56,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/tiposderopa").hasAnyRole("USER","MANAGER") // Solo USER
                         .requestMatchers("/api/admin").hasRole("ADMIN") // Solo ADMIN
                         .requestMatchers("/api/outfits").hasRole("MANAGER") // Solo MANAGER
-                        .requestMatchers("/api/v1/authenticate", "/api/v1/register").permitAll() // Endpoints públicos
+                        .requestMatchers("/api/v1/authenticate", "/api/v1/register", "/api-docs", "swagger-ui/**").permitAll() // Endpoints públicos
                         .anyRequest().authenticated() // El resto requiere autenticación
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class); // Filtro JWT

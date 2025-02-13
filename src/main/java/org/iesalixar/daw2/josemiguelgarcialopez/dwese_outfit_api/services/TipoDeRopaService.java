@@ -1,6 +1,7 @@
 package org.iesalixar.daw2.josemiguelgarcialopez.dwese_outfit_api.services;
 
 import jakarta.validation.Valid;
+
 import org.iesalixar.daw2.josemiguelgarcialopez.dwese_outfit_api.dtos.TipoDeRopaCreateDTO;
 import org.iesalixar.daw2.josemiguelgarcialopez.dwese_outfit_api.dtos.TipoDeRopaDTO;
 import org.iesalixar.daw2.josemiguelgarcialopez.dwese_outfit_api.entities.TipoDeRopa;
@@ -10,11 +11,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Locale;
-import java.util.stream.Collectors;
+
 
 @Service
 public class TipoDeRopaService {
@@ -35,19 +37,19 @@ public class TipoDeRopaService {
      *
      * @return Lista de TipoDeRopaDTO.
      */
-    public List<TipoDeRopaDTO> getAllTiposDeRopa() {
-        logger.info("Solicitando todos los tipos de ropa...");
+    public Page<TipoDeRopaDTO> getAllTiposDeRopa(Pageable pageable) {
+        logger.info("Solicitando todos los tipos de ropa con paginación: página {}, tamaño{}",
+                pageable.getPageNumber(), pageable.getPageSize());
         try {
-            List<TipoDeRopa> tiposDeRopa = tipoDeRopaRepository.findAll();
-            logger.info("Se han encontrado {} tipos de ropa.", tiposDeRopa.size());
-            return tiposDeRopa.stream()
-                    .map(tipoDeRopaMapper::toDTO)
-                    .collect(Collectors.toList());
+            Page<TipoDeRopa> tiposDeRopa = tipoDeRopaRepository.findAll(pageable);
+            logger.info("Se han encontrado {} tipos de ropa en la página actual.", tiposDeRopa.getNumberOfElements());
+            return tiposDeRopa.map(tipoDeRopaMapper::toDTO);
         } catch (Exception e) {
             logger.error("Error al obtener la lista de tipos de ropa: {}", e.getMessage());
             throw e;
         }
     }
+
 
     /**
      * Obtiene un tipo de ropa por su ID y lo convierte en un TipoDeRopaDTO.
